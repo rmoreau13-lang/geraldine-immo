@@ -59,6 +59,7 @@
   tr.vu .secteur{color:#8a93a1}
   tr.vu .prix{color:#9aa2af}
   tr.vu.fav td{background:#fffdf4}
+  tr.isnew td{box-shadow:inset 3px 0 0 var(--or)}
   .vutoggle{display:inline-block;margin-top:5px;font-size:10px;color:#6B7280;cursor:pointer;text-decoration:none;border:1px solid var(--gris2);border-radius:5px;padding:1px 7px}
   .vutoggle:hover{background:var(--gris2)}
   .vutoggle.on{color:#2D7A2D;border-color:#bfe0bf;background:var(--vert-bg)}
@@ -94,6 +95,30 @@
   .sq{width:10px;height:10px;display:inline-block;transform:rotate(45deg);border:1px solid #fff}
   footer{text-align:center;font-size:11px;color:#9098a5;padding:24px;font-style:italic;border-top:1px solid var(--gris2);margin-top:30px;background:#fff}
   footer .agence{font-style:normal;color:var(--prim-dark);font-weight:600;margin-bottom:4px}
+  @media(max-width:760px){
+    header{padding:14px 14px}
+    header .topline{gap:10px}
+    .agent-card{text-align:left}
+    .brand h1{font-size:18px}
+    .title-block h2{font-size:17px}
+    .wrap{padding:14px 12px 40px}
+    .kpis{grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}
+    .kpi{padding:11px 12px}
+    .kpi .val{font-size:19px}
+    .controls{padding:12px;gap:10px}
+    .ctrl{flex:1 1 44%}
+    .ctrl select,.ctrl input{min-width:0;width:100%}
+    .ctrl input[type=range]{min-width:0}
+    .reset{flex:1 1 100%}
+    table{font-size:11.5px;min-width:700px}
+    th,td{padding:7px 5px}
+    .tablebox{max-height:none;-webkit-overflow-scrolling:touch}
+    .layout{gap:12px}
+    #map{height:340px}
+    .lien{padding:4px 8px;font-size:11px}
+    .intro{font-size:12.5px;padding:14px 14px}
+    .prix{font-size:12.5px}
+  }
 </style>
 </head>
 <body>
@@ -113,15 +138,18 @@
   </div>
   <div class="title-block">
     <h2>Sélection de biens — Géraldine &amp; son époux</h2>
-    <div class="meta">≈ 90 à 150 m² · 3 chambres + bureau · Appartements &amp; Maisons · Proche métro ou tram · Budget 450 000 € max · Travaux possibles · Extérieur idéalement · Secteurs : 13001 · 13002 · 13004 · 13005 · 13006 · 13009 · 13012 · Sources : SeLoger + LeBonCoin + Jinka · Mise à jour : <span id="dateMaj">30/05/2026</span></div>
+    <div class="meta">≈ 90 à 150 m² · 3 chambres + bureau · Appartements &amp; Maisons · Proche métro ou tram · Budget jusqu'à 500 000 € (négociable) · Travaux possibles · Extérieur idéalement · Secteurs : 13001 · 13002 · 13004 · 13005 · 13006 · 13009 · 13012 · Sources : SeLoger + LeBonCoin + Jinka · Mise à jour : <span id="dateMaj">30/05/2026</span></div>
   </div>
 </header>
 
 <div class="wrap">
   <div class="intro">
-    <p><strong>Chère Géraldine,</strong></p>
-    <p>Voici une sélection de <strong>vraies annonces en ligne</strong> correspondant à vos critères : 3 chambres + bureau (T4/T5 ou maison), environ 90 à 150 m², proche d'une station de métro ou de tram, dans la limite de 450 000 €. Les annonces proviennent de <strong>SeLoger et LeBonCoin</strong> (les deux portails agrégés par Jinka) ; chaque bouton « <strong>Voir l'annonce</strong> » ouvre directement la bonne annonce, et le lien « Jinka » donne accès à l'agrégateur. Cliquez sur le ❤ pour garder vos coups de cœur, filtrez à votre guise, et visualisez tout sur la carte. Pour une visite, appelez-moi au <strong>06 09 71 27 91</strong>.</p>
-    <p style="margin-top:6px;font-size:11.5px;color:#9098a5">Prix d'affichage indicatifs, susceptibles d'évoluer. Distances aux stations estimées à vol d'oiseau depuis le centre du quartier.</p>
+    <p><strong>Chère Géraldine,</strong> 😊</p>
+    <p>Voici votre sélection de <strong>vraies annonces en ligne</strong> correspondant à vos critères : 3 chambres + bureau (T4/T5 ou maison), environ 90 à 150 m², proche métro ou tram, budget jusqu'à <strong>500 000 €</strong> (la plupart des biens se négocient 🤝). Les annonces proviennent de <strong>SeLoger, LeBonCoin et Jinka</strong> ; chaque bouton « Voir l'annonce » ouvre directement la bonne annonce. ❤ pour vos coups de cœur, ✓ pour marquer les biens déjà vus, et la carte 🗺️ pour tout visualiser.</p>
+    <p>📌 <strong>Cette page est mise à jour plusieurs fois par jour</strong> — pensez à l'ajouter en favori sur votre ordinateur. Elle fonctionne sur mobile, mais elle est plus confortable sur PC. 💻</p>
+    <p>💡 Pour encore plus d'efficacité, je vous conseille de télécharger l'application <strong>Jinka</strong> (création de compte gratuite ✅) qui regroupe tous les portails immobiliers au même endroit.</p>
+    <p>📞 Pas besoin de m'appeler pour organiser les visites : vous pouvez les <strong>réserver directement auprès de l'annonceur</strong>. Appelez-moi plutôt pour un <strong>conseil</strong> si besoin, au <strong>06 09 71 27 91</strong>. Bien à vous, Rémi.</p>
+    <p style="margin-top:6px;font-size:11.5px;color:#9098a5">Prix d'affichage indicatifs (négociables). Distances aux stations estimées à vol d'oiseau depuis le centre du quartier.</p>
   </div>
 
   <div class="kpis" id="kpis"></div>
@@ -131,11 +159,12 @@
     <div class="ctrl"><label>Pièces</label><select id="fType"><option value="">Toutes</option><option value="4">T4 / 4 P.</option><option value="5">T5 / 5 P.</option></select></div>
     <div class="ctrl"><label>Chambres</label><select id="fCh"><option value="">Toutes</option><option value="3">≥ 3 chambres</option></select></div>
     <div class="ctrl"><label>Secteur</label><select id="fSect"><option value="">Tous</option></select></div>
-    <div class="ctrl"><label>Portail</label><select id="fSrc"><option value="">Tous</option><option value="SL">SeLoger</option><option value="LBC">LeBonCoin</option><option value="JK">Jinka</option></select></div>
+    <div class="ctrl"><label>Portail</label><select id="fSrc"><option value="">Tous</option><option value="SL">SeLoger</option><option value="LBC">LeBonCoin</option><option value="JK">Jinka</option><option value="PAP">PAP</option></select></div>
     <div class="ctrl"><label>Transport</label><select id="fTport"><option value="">Tous</option><option value="300">≤ 300 m d'une station</option><option value="600">≤ 600 m d'une station</option></select></div>
     <div class="ctrl"><label>DPE max</label><select id="fDpe"><option value="">Tous</option><option value="C">A → C</option><option value="D">A → D</option><option value="E">A → E</option></select></div>
     <div class="ctrl"><label>Extérieur</label><select id="fExt"><option value="">Tous</option><option value="oui">Avec extérieur</option></select></div>
-    <div class="ctrl"><label>Budget max : <span id="prixVal">450 000 €</span></label><input type="range" id="fPrix" min="200000" max="450000" step="5000" value="450000"></div>
+    <div class="ctrl"><label>Budget max : <span id="prixVal">500 000 €</span></label><input type="range" id="fPrix" min="200000" max="500000" step="5000" value="500000"></div>
+    <div class="ctrl"><label>&nbsp;</label><label class="toggle"><input type="checkbox" id="fNew"> 🆕 Nouveautés</label></div>
     <div class="ctrl"><label>&nbsp;</label><label class="toggle"><input type="checkbox" id="fStar"> <span class="star">★</span> Coups de cœur</label></div>
     <div class="ctrl"><label>&nbsp;</label><label class="toggle"><input type="checkbox" id="fFav"> ❤ Favoris</label></div>
     <div class="ctrl"><label>&nbsp;</label><label class="toggle"><input type="checkbox" id="fHideVu"> Masquer les vus</label></div>
@@ -149,6 +178,7 @@
         <table id="tbl">
           <thead><tr>
             <th data-k="fav">❤</th>
+            <th data-k="new">Nouv.</th>
             <th data-k="secteur">Secteur / Quartier</th>
             <th data-k="m2">Surface</th>
             <th data-k="ch">Ch.</th>
@@ -355,9 +385,9 @@ const BIENS=[
 const fmtP=p=>p.toLocaleString('fr-FR')+" €";
 const SECTLBL={a:"Appart.",m:"Maison"};
 const DPECOL={A:"#2E7D32",B:"#4CAF50",C:"#8BC34A",D:"#F4C20D",E:"#F0AD4E",F:"#FF7043",G:"#D9534F"};
-const SRC={SL:{n:"SeLoger",c:"#E2001A"},LBC:{n:"LeBonCoin",c:"#FF6E14"},JK:{n:"Jinka",c:"#6C3FC7"}};
+const SRC={SL:{n:"SeLoger",c:"#E2001A"},LBC:{n:"LeBonCoin",c:"#FF6E14"},JK:{n:"Jinka",c:"#6C3FC7"},PAP:{n:"PAP",c:"#0AA0A0"}};
 function srcOf(b){return b.src||'SL';}
-function url(b){const s=srcOf(b);if(s==='LBC')return "https://www.leboncoin.fr/ad/ventes_immobilieres/"+b.i;if(s==='JK')return "https://www.jinka.fr/ad/"+b.i;return "https://www.seloger.com/annonces/achat/"+(b.t==='m'?'maison':'appartement')+"/marseille-13/"+b.i+".htm";}
+function url(b){const s=srcOf(b);if(s==='LBC')return "https://www.leboncoin.fr/ad/ventes_immobilieres/"+b.i;if(s==='JK')return "https://www.jinka.fr/ad/"+b.i;if(s==='PAP')return "https://www.pap.fr/annonces/"+b.i;return "https://www.seloger.com/annonces/achat/"+(b.t==='m'?'maison':'appartement')+"/marseille-13/"+b.i+".htm";}
 function srcBadge(b){const s=SRC[srcOf(b)];return '<span class="badge" style="background:'+s.c+'1e;color:'+s.c+'">'+s.n+'</span>';}
 const EXTMAP={3166690920:"Terrasse",3173115781:"Balcon",3206896969:"Terrasse",3206900105:"Terrasse",3202058912:"Balcon",3055499559:"Balcon",3194407471:"Balcon",3079186211:"Balcon",3207087331:"Balcon",3054929871:"Terrasse",3181315954:"Terrasse",3207036347:"Balcon",3177031847:"Jardin",3145465741:"Balcon",3150387749:"Terrasse",3187408485:"Balcon",3155191967:"Terrasse",3138010794:"Jardin",3204058614:"Terrasse"};
 function extOf(b){if(EXTMAP[b.i])return EXTMAP[b.i];if(b.t==='m')return "Jardin";return "";}
@@ -380,6 +410,8 @@ function saveVus(){try{localStorage.setItem(VUKEY,JSON.stringify([...VUS]))}catc
 function isVu(b){return VUS.has(String(b.i));}
 function toggleVu(id){id=String(id);if(VUS.has(id))VUS.delete(id);else VUS.add(id);saveVus();renderKPIs();render();}
 function markSeen(id){id=String(id);if(!VUS.has(id)){VUS.add(id);saveVus();setTimeout(()=>{renderKPIs();render();},10);}}
+const NEWIDS=new Set(["267589867","270422541","269030395","266490601","3206896969","3200576982","3207087331","3204058614","9cf2d189-9f8d-425d-84c6-e1730aaf6279","80b8622b-eb12-4b3d-9e2a-750663257c66","2c2d1f61-4192-40c2-803c-cd1d02e6a23e","06a41737-95e1-41dc-b7fa-3cee0152858b"]);
+function isNew(b){return NEWIDS.has(String(b.i));}
 let sortKey="_m2p",sortDir=1,currentData=[];
 const dpeRank={A:1,B:2,C:3,D:4,E:5,F:6,G:7,"":9};
 
@@ -391,9 +423,11 @@ function getFiltered(){
     fsr=document.getElementById('fSrc').value,
     fext=document.getElementById('fExt').value,
     hv=document.getElementById('fHideVu').checked,
+    fnew=document.getElementById('fNew').checked,
     ffav=document.getElementById('fFav').checked;
   return BIENS.filter(b=>{
     if(hv&&isVu(b))return false;
+    if(fnew&&!isNew(b))return false;
     if(fb&&b.t!==fb)return false;
     if(fsr&&srcOf(b)!==fsr)return false;
     if(fext==='oui'&&!extOf(b))return false;
@@ -408,6 +442,7 @@ function getFiltered(){
     return true;
   }).sort((a,b)=>{
     if(sortKey==="fav")return ((isFav(b)?1:0)-(isFav(a)?1:0))*sortDir;
+    if(sortKey==="new")return ((isNew(b)?1:0)-(isNew(a)?1:0))*sortDir;
     if(sortKey==="x")return ((extOf(b)?1:0)-(extOf(a)?1:0))*sortDir;
     if(sortKey==="secteur")return (a.s+a.q).localeCompare(b.s+b.q)*sortDir;
     if(sortKey==="d")return ((dpeRank[a.d]||9)-(dpeRank[b.d]||9))*sortDir;
@@ -425,6 +460,7 @@ function renderKPIs(){
     <div class="kpi"><div class="lbl">Coups de cœur</div><div class="val gold">★ ${stars}</div><div class="sub">meilleur rapport</div></div>
     <div class="kpi"><div class="lbl">Mes favoris</div><div class="val red">❤ ${FAV.size}</div><div class="sub">cliquez le ❤</div></div>
     <div class="kpi"><div class="lbl">Déjà vus</div><div class="val">✓ ${VUS.size}</div><div class="sub">annonces consultées</div></div>
+    <div class="kpi"><div class="lbl">Nouveautés</div><div class="val gold">🆕 ${BIENS.filter(isNew).length}</div><div class="sub">depuis le dernier point</div></div>
     <div class="kpi"><div class="lbl">Maisons</div><div class="val green">${mais}</div><div class="sub">avec extérieur</div></div>
     <div class="kpi"><div class="lbl">Surface médiane</div><div class="val">${medM} m²</div><div class="sub">de la sélection</div></div>
     <div class="kpi"><div class="lbl">Budget médian</div><div class="val">${Math.round(med/1000)} K€</div><div class="sub">prix d'affichage</div></div>
@@ -435,8 +471,9 @@ function render(){
   document.getElementById('tbody').innerHTML=data.map(b=>{
     const fav=isFav(b);
     const dpe=b.d?`<span class="dpe" style="background:${DPECOL[b.d]}">${b.d}</span>`:'<span class="dpe" style="background:#aab">NR</span>';
-    return `<tr class="${fav?'fav':''} ${isVu(b)?'vu':''}">
+    return `<tr class="${fav?'fav':''} ${isVu(b)?'vu':''} ${isNew(b)?'isnew':''}">
     <td style="text-align:center"><span class="heart ${fav?'on':''}" onclick="toggleFav('${b.i}')" title="Ajouter aux favoris">${fav?'❤':'♡'}</span></td>
+    <td style="text-align:center">${isNew(b)?'<span class="badge b-new">NOUVEAU</span>':''}</td>
     <td><div class="secteur">${isStar(b)?'<span class="star">★</span> ':''}${SECTLBL[b.t]} · ${b.s}</div><div class="quart">${b.q||'—'}${b.t==='m'?' · maison/jardin':''} · ${srcBadge(b)}</div></td>
     <td>${b.m2} m²</td>
     <td>${b.ch?b.ch+' ch':'—'}</td>
@@ -479,8 +516,8 @@ function renderMap(){
 })();
 function initSel(){[...new Set(BIENS.map(b=>b.s))].sort().forEach(q=>{const o=document.createElement('option');o.value=q;o.textContent=q;document.getElementById('fSect').appendChild(o);});}
 document.querySelectorAll('th[data-k]').forEach(th=>th.addEventListener('click',()=>{const k=th.dataset.k;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}render();}));
-['fBien','fType','fCh','fSect','fSrc','fTport','fDpe','fExt','fPrix','fStar','fFav','fHideVu'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{document.getElementById('prixVal').textContent=(+document.getElementById('fPrix').value).toLocaleString('fr-FR')+" €";render();}));
-document.getElementById('reset').addEventListener('click',()=>{['fBien','fType','fCh','fSect','fSrc','fTport','fDpe','fExt'].forEach(id=>document.getElementById(id).value="");document.getElementById('fStar').checked=false;document.getElementById('fFav').checked=false;document.getElementById('fHideVu').checked=false;document.getElementById('fPrix').value=450000;document.getElementById('prixVal').textContent="450 000 €";sortKey="_m2p";sortDir=1;render();});
+['fBien','fType','fCh','fSect','fSrc','fTport','fDpe','fExt','fPrix','fStar','fFav','fHideVu','fNew'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{document.getElementById('prixVal').textContent=(+document.getElementById('fPrix').value).toLocaleString('fr-FR')+" €";render();}));
+document.getElementById('reset').addEventListener('click',()=>{['fBien','fType','fCh','fSect','fSrc','fTport','fDpe','fExt'].forEach(id=>document.getElementById(id).value="");document.getElementById('fStar').checked=false;document.getElementById('fFav').checked=false;document.getElementById('fHideVu').checked=false;document.getElementById('fNew').checked=false;document.getElementById('fPrix').value=500000;document.getElementById('prixVal').textContent="500 000 €";sortKey="_m2p";sortDir=1;render();});
 initSel();renderKPIs();render();
 </script>
 </body>
