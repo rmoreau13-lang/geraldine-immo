@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sélection de biens — Géraldine &amp; son époux — Pardo &amp; Chartier</title>
+<style>
+  :root{ color-scheme: light;
+    --prim:#1F4E79; --prim-dark:#152D4D; --sec:#2E75B6; --or:#C9A961;
+    --txt:#1A1A2E; --gris:#F7F8FA; --gris2:#E8ECF0; --vert:#5CB85C; --vert-bg:#DFF0D8;
+    --orange:#F0AD4E; --orange-bg:#FCF8E3; --rouge:#D9534F; --rouge-bg:#F2DEDE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Calibri,Arial,sans-serif;color:var(--txt);background:#fafbfc;line-height:1.5}
+  .topbar{height:6px;background:var(--prim-dark)}
+  header{background:#fff;padding:22px 30px;border-bottom:3px solid var(--or)}
+  header .topline{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:18px}
+  .brand h1{font-size:22px;letter-spacing:1px;color:var(--prim-dark);font-weight:700}
+  .brand .sub{font-size:10.5px;color:var(--or);letter-spacing:2.5px;text-transform:uppercase;margin-top:4px}
+  .agent-card{text-align:right;font-size:12.5px;color:var(--prim-dark);line-height:1.55}
+  .agent-card .nom{font-weight:700;font-size:13.5px}
+  .agent-card a{color:var(--sec);text-decoration:none}
+  .title-block{margin-top:18px;padding-top:18px;border-top:1px dashed var(--gris2)}
+  .title-block h2{font-size:22px;color:var(--prim-dark);font-weight:600}
+  .title-block .meta{font-size:11.5px;color:#6B7280;font-style:italic;margin-top:4px}
+  .wrap{max-width:1320px;margin:0 auto;padding:24px 30px 60px}
+  .intro{background:#fff;border-left:4px solid var(--or);padding:16px 20px;border-radius:8px;font-size:13.5px;color:var(--prim-dark);margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .intro p{margin-bottom:8px}.intro p:last-child{margin-bottom:0}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}
+  .kpi{background:#fff;border-radius:10px;padding:14px 16px;border-bottom:3px solid var(--or);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .kpi .lbl{font-size:10.5px;color:#6B7280;text-transform:uppercase;letter-spacing:.4px}
+  .kpi .val{font-size:23px;font-weight:700;color:var(--prim-dark);margin-top:3px}
+  .kpi .val.green{color:var(--vert)} .kpi .val.gold{color:var(--or)} .kpi .val.red{color:var(--rouge)}
+  .kpi .sub{font-size:10px;color:#9098a5;margin-top:1px}
+  .controls{background:#fff;border-radius:10px;padding:14px 18px;margin-bottom:18px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .ctrl{display:flex;flex-direction:column;gap:4px}
+  .ctrl label{font-size:10px;color:#6B7280;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+  .ctrl select,.ctrl input{padding:7px 10px;border:1px solid var(--gris2);border-radius:6px;font-size:13px;font-family:inherit;background:#fff;min-width:110px}
+  .ctrl input[type=range]{min-width:150px}
+  .toggle{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;user-select:none}
+  .reset{background:var(--prim);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600}
+  .reset:hover{background:var(--prim-dark)}
+  .layout{display:grid;grid-template-columns:1fr 470px;gap:18px}
+  @media(max-width:1100px){.layout{grid-template-columns:1fr}}
+  .panel{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .panel h3{background:var(--prim);color:#fff;padding:12px 18px;font-size:13.5px;display:flex;justify-content:space-between;align-items:center}
+  .panel h3 .count{font-size:11.5px;font-weight:400;opacity:.85}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{background:var(--gris);text-align:left;padding:10px 7px;font-size:10px;text-transform:uppercase;letter-spacing:.3px;color:var(--prim);cursor:pointer;white-space:nowrap;border-bottom:2px solid var(--gris2);position:sticky;top:0;z-index:2}
+  th:hover{background:var(--gris2)}
+  td{padding:9px 7px;border-bottom:1px solid var(--gris2);vertical-align:middle}
+  tr:hover td{background:#f3f7fc}
+  .tablebox{max-height:600px;overflow:auto}
+  .badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:10.5px;font-weight:700;white-space:nowrap}
+  .b-new{background:var(--or);color:#fff}
+  tr.fav td{background:#fffdf4}
+  tr.fav:hover td{background:#fdf6e0}
+  tr.vu td{color:#9aa2af}
+  tr.vu .secteur{color:#8a93a1}
+  tr.vu .prix{color:#9aa2af}
+  tr.vu.fav td{background:#fffdf4}
+  .vutoggle{display:inline-block;margin-top:5px;font-size:10px;color:#6B7280;cursor:pointer;text-decoration:none;border:1px solid var(--gris2);border-radius:5px;padding:1px 7px}
+  .vutoggle:hover{background:var(--gris2)}
+  .vutoggle.on{color:#2D7A2D;border-color:#bfe0bf;background:var(--vert-bg)}
+  .badge-vu{background:var(--gris2);color:#5a6473}
+  .prix{font-weight:700;color:var(--prim-dark);white-space:nowrap;font-size:13.5px}
+  .lien{display:inline-block;background:var(--sec);color:#fff;font-weight:700;text-decoration:none;white-space:nowrap;padding:5px 11px;border-radius:6px;font-size:12px}
+  .lien:hover{background:var(--prim)}
+  .secteur{font-weight:600;color:var(--prim-dark);font-size:12.5px}
+  .quart{font-size:10.5px;color:#6B7280;margin-top:1px}
+  .heart{cursor:pointer;font-size:18px;line-height:1;user-select:none;color:#cdd3db;transition:transform .15s}
+  .heart:hover{transform:scale(1.25)}
+  .heart.on{color:#e8533f}
+  .dpe{display:inline-block;width:22px;text-align:center;color:#fff;font-weight:700;border-radius:4px;font-size:11px;padding:2px 0}
+  .star{color:var(--or)}
+  .chip{font-size:9.5px;color:#6B7280;text-decoration:none;border:1px solid var(--gris2);border-radius:5px;padding:1px 6px;background:#fff;white-space:nowrap}
+  .chip:hover{background:var(--gris2);color:var(--prim-dark)}
+  .tport{font-size:11px;white-space:nowrap}
+  .tdist{font-size:10px;color:#6B7280}
+  #mapbox{position:relative;padding:0}
+  #map{position:relative;width:100%;height:560px;overflow:hidden;cursor:grab;background-color:#e9eef1}
+  #map .tile{position:absolute;width:256px;height:256px;user-select:none;pointer-events:none;z-index:1}
+  #map .mk{position:absolute;width:16px;height:16px;border-radius:50%;border:2px solid #fff;transform:translate(-50%,-50%);box-shadow:0 1px 4px rgba(0,0,0,.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;text-decoration:none;z-index:5}
+  #map .mk:hover{width:22px;height:22px;z-index:10}
+  #map .mkfav{box-shadow:0 0 0 3px rgba(232,83,63,.6),0 1px 4px rgba(0,0,0,.45)}
+  #map .station{position:absolute;width:9px;height:9px;transform:translate(-50%,-50%) rotate(45deg);border:1.5px solid #fff;box-shadow:0 1px 2px rgba(0,0,0,.4);z-index:4}
+  .mapctrl{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:5px;z-index:20}
+  .mapctrl button{width:30px;height:30px;border:none;background:#fff;border-radius:6px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.3);color:var(--prim-dark)}
+  .mapctrl button:hover{background:var(--gris2)}
+  .attrib{position:absolute;bottom:2px;right:6px;font-size:9.5px;background:rgba(255,255,255,.82);padding:2px 6px;border-radius:3px;z-index:20;color:#333}
+  .maplegend{font-size:11px;color:#6B7280;padding:9px 18px;background:var(--gris);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .maplegend span{display:inline-flex;align-items:center;gap:5px}
+  .dot{width:11px;height:11px;border-radius:50%;display:inline-block}
+  .sq{width:10px;height:10px;display:inline-block;transform:rotate(45deg);border:1px solid #fff}
+  footer{text-align:center;font-size:11px;color:#9098a5;padding:24px;font-style:italic;border-top:1px solid var(--gris2);margin-top:30px;background:#fff}
+  footer .agence{font-style:normal;color:var(--prim-dark);font-weight:600;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<header>
+  <div class="topline">
+    <div class="brand">
+      <h1>PARDO &amp; CHARTIER</h1>
+      <div class="sub">Immobilier — by Le Pacte Immo</div>
+    </div>
+    <div class="agent-card">
+      <div class="nom">Rémi MOREAU</div>
+      <div>Agent immobilier — Pardo &amp; Chartier · by Le Pacte Immo</div>
+      <div>06 09 71 27 91 · <a href="mailto:remi@lepacteimmo.com">remi@lepacteimmo.com</a></div>
+      <div>101 rue de l'Aiguillette, 13012 Marseille</div>
+    </div>
+  </div>
+  <div class="title-block">
+    <h2>Sélection de biens — Géraldine &amp; son époux</h2>
+    <div class="meta">≈ 90 à 150 m² · 3 chambres + bureau · Appartements &amp; Maisons · Proche métro ou tram · Budget 450 000 € max · Travaux possibles · Extérieur idéalement · Secteurs : 13001 · 13002 · 13004 · 13005 · 13006 · 13009 · 13012 · Sources : SeLoger + LeBonCoin + Jinka · Mise à jour : <span id="dateMaj">30/05/2026</span></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <p><strong>Chère Géraldine,</strong></p>
+    <p>Voici une sélection de <strong>vraies annonces en ligne</strong> correspondant à vos critères : 3 chambres + bureau (T4/T5 ou maison), environ 90 à 150 m², proche d'une station de métro ou de tram, dans la limite de 450 000 €. Les annonces proviennent de <strong>SeLoger et LeBonCoin</strong> (les deux portails agrégés par Jinka) ; chaque bouton « <strong>Voir l'annonce</strong> » ouvre directement la bonne annonce, et le lien « Jinka » donne accès à l'agrégateur. Cliquez sur le ❤ pour garder vos coups de cœur, filtrez à votre guise, et visualisez tout sur la carte. Pour une visite, appelez-moi au <strong>06 09 71 27 91</strong>.</p>
+    <p style="margin-top:6px;font-size:11.5px;color:#9098a5">Prix d'affichage indicatifs, susceptibles d'évoluer. Distances aux stations estimées à vol d'oiseau depuis le centre du quartier.</p>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="controls">
+    <div class="ctrl"><label>Type de bien</label><select id="fBien"><option value="">Tous</option><option value="a">Appartement</option><option value="m">Maison</option></select></div>
+    <div class="ctrl"><label>Pièces</label><select id="fType"><option value="">Toutes</option><option value="4">T4 / 4 P.</option><option value="5">T5 / 5 P.</option></select></div>
+    <div class="ctrl"><label>Chambres</label><select id="fCh"><option value="">Toutes</option><option value="3">≥ 3 chambres</option></select></div>
+    <div class="ctrl"><label>Secteur</label><select id="fSect"><option value="">Tous</option></select></div>
+    <div class="ctrl"><label>Portail</label><select id="fSrc"><option value="">Tous</option><option value="SL">SeLoger</option><option value="LBC">LeBonCoin</option><option value="JK">Jinka</option></select></div>
+    <div class="ctrl"><label>Transport</label><select id="fTport"><option value="">Tous</option><option value="300">≤ 300 m d'une station</option><option value="600">≤ 600 m d'une station</option></select></div>
+    <div class="ctrl"><label>DPE max</label><select id="fDpe"><option value="">Tous</option><option value="C">A → C</option><option value="D">A → D</option><option value="E">A → E</option></select></div>
+    <div class="ctrl"><label>Extérieur</label><select id="fExt"><option value="">Tous</option><option value="oui">Avec extérieur</option></select></div>
+    <div class="ctrl"><label>Budget max : <span id="prixVal">450 000 €</span></label><input type="range" id="fPrix" min="200000" max="450000" step="5000" value="450000"></div>
+    <div class="ctrl"><label>&nbsp;</label><label class="toggle"><input type="checkbox" id="fStar"> <span class="star">★</span> Coups de cœur</label></div>
+    <div class="ctrl"><label>&nbsp;</label><label class="toggle"><input type="checkbox" id="fFav"> ❤ Favoris</label></div>
+    <div class="ctrl"><label>&nbsp;</label><label class="toggle"><input type="checkbox" id="fHideVu"> Masquer les vus</label></div>
+    <button class="reset" id="reset">Réinitialiser</button>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <h3>Biens sélectionnés <span class="count" id="tableCount"></span></h3>
+      <div class="tablebox">
+        <table id="tbl">
+          <thead><tr>
+            <th data-k="fav">❤</th>
+            <th data-k="secteur">Secteur / Quartier</th>
+            <th data-k="m2">Surface</th>
+            <th data-k="ch">Ch.</th>
+            <th data-k="p">Prix</th>
+            <th data-k="m2p">€/m²</th>
+            <th data-k="td">Métro / Tram</th>
+            <th data-k="x">Extérieur</th>
+            <th data-k="d">DPE</th>
+            <th>Annonce</th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="maplegend">
+        <span><span class="star">★</span> coup de cœur = ≥3 ch · ≤430 K€ · bon €/m² · station ≤ 400 m</span>
+        <span>❤ = favori</span>
+        <span><span class="dot" style="background:var(--vert)"></span> station ≤ 300 m</span>
+        <span><span class="dot" style="background:var(--orange)"></span> ≤ 600 m</span>
+        <span><span class="dot" style="background:var(--rouge)"></span> &gt; 600 m</span>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Carte interactive <span class="count">Marseille · métro &amp; tram</span></h3>
+      <div id="mapbox">
+        <div id="map"></div>
+        <div class="mapctrl"><button id="zin">+</button><button id="zout">−</button><button id="zfit">⤢</button></div>
+        <div class="attrib">© OpenStreetMap</div>
+      </div>
+      <div class="maplegend">
+        <span><span class="sq" style="background:var(--prim)"></span> Métro M1</span>
+        <span><span class="sq" style="background:var(--rouge)"></span> Métro M2</span>
+        <span><span class="sq" style="background:var(--vert)"></span> Tram</span>
+        <span>Glissez pour vous déplacer · molette pour zoomer.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="agence">PARDO &amp; CHARTIER — Le Pacte Immo</div>
+  Rémi MOREAU · 06 09 71 27 91 · remi@lepacteimmo.com · 101 rue de l'Aiguillette, 13012 Marseille<br>
+  Annonces issues de SeLoger — prix de présentation, à confronter aux valeurs réalisées. Fond de carte © OpenStreetMap.
+</footer>
+
+<script>
+const STATIONS=[
+ {n:"Vieux-Port",l:"M1",lat:43.2952,lng:5.3743,c:"#1F4E79"},{n:"Saint-Charles",l:"M1/M2",lat:43.3027,lng:5.3804,c:"#1F4E79"},
+ {n:"Réformés-Canebière",l:"M1",lat:43.2984,lng:5.3848,c:"#1F4E79"},{n:"Estrangin",l:"M1",lat:43.2887,lng:5.3792,c:"#1F4E79"},
+ {n:"Castellane",l:"M1/M2",lat:43.2856,lng:5.3812,c:"#1F4E79"},{n:"Baille",l:"M1",lat:43.2898,lng:5.3922,c:"#1F4E79"},
+ {n:"La Timone",l:"M1",lat:43.2872,lng:5.3985,c:"#1F4E79"},{n:"Cinq Avenues-Longchamp",l:"M1",lat:43.3033,lng:5.3918,c:"#1F4E79"},
+ {n:"Chartreux",l:"M1",lat:43.3068,lng:5.3958,c:"#1F4E79"},{n:"Saint-Just",l:"M1",lat:43.3140,lng:5.4010,c:"#1F4E79"},
+ {n:"La Blancarde",l:"M1",lat:43.2983,lng:5.4052,c:"#1F4E79"},{n:"Louis Armand",l:"M1",lat:43.2992,lng:5.4185,c:"#1F4E79"},
+ {n:"Saint-Barnabé",l:"M1",lat:43.3010,lng:5.4170,c:"#1F4E79"},{n:"La Fourragère",l:"M1",lat:43.2962,lng:5.4288,c:"#1F4E79"},
+ {n:"Joliette",l:"M2",lat:43.3045,lng:5.3672,c:"#D9534F"},{n:"Désirée Clary",l:"M2",lat:43.3118,lng:5.3712,c:"#D9534F"},
+ {n:"National",l:"M2",lat:43.3110,lng:5.3850,c:"#D9534F"},{n:"Notre-Dame-du-Mont",l:"M2",lat:43.2934,lng:5.3878,c:"#D9534F"},
+ {n:"Périer",l:"M2",lat:43.2790,lng:5.3856,c:"#D9534F"},{n:"Sainte-Marguerite Dromel",l:"M2",lat:43.2622,lng:5.4078,c:"#D9534F"},
+ {n:"Noailles",l:"Tram",lat:43.2958,lng:5.3808,c:"#5CB85C"},{n:"Sadi Carnot",l:"Tram",lat:43.2996,lng:5.3720,c:"#5CB85C"},
+ {n:"Eugène Pierre",l:"Tram",lat:43.3010,lng:5.3935,c:"#5CB85C"},{n:"Foch",l:"Tram",lat:43.2975,lng:5.3990,c:"#5CB85C"},
+ {n:"Saint-Pierre",l:"Tram",lat:43.2940,lng:5.4010,c:"#5CB85C"},{n:"Les Caillols",l:"Tram",lat:43.2930,lng:5.4360,c:"#5CB85C"}
+];
+const QUART={"le camas":[43.2925,5.3905],"saint pierre":[43.2900,5.4015],"baille":[43.2898,5.3925],"la conception":[43.2882,5.3962],"notre dame du mont":[43.2930,5.3874],"lodi":[43.2876,5.3866],"cinq avenues":[43.3012,5.3912],"castellane":[43.2856,5.3812],"le rouet":[43.2818,5.3872],"palais de justice":[43.2905,5.3792],"vauban":[43.2882,5.3792],"thiers":[43.2986,5.3852],"opéra":[43.2945,5.3782],"le chapitre":[43.3006,5.3852],"saint charles":[43.3024,5.3806],"belsunce":[43.2984,5.3792],"les grandes carmes":[43.2986,5.3738],"la joliette":[43.3046,5.3682],"les chutes lavies":[43.3092,5.3952],"la blancarde":[43.2984,5.4052],"saint jean du désert":[43.2956,5.4092],"montolivet":[43.2990,5.4180],"saint marcel":[43.2940,5.4470],"la fourragère":[43.2962,5.4288],"saint barnabé":[43.3010,5.4178],"saint julien":[43.2938,5.4310],"sainte marguerite":[43.2625,5.4080],"le cabot":[43.2560,5.4120],"la panouse":[43.2480,5.4180],"opera":[43.2945,5.3782],"la fourragere":[43.2962,5.4288],"le redon":[43.2410,5.4080],"hotel de ville":[43.2972,5.3700],"chutes lavie":[43.3092,5.3952]};
+const SECTC={"13001":[43.2972,5.3822],"13002":[43.3050,5.3692],"13004":[43.3045,5.3988],"13005":[43.2902,5.3952],"13006":[43.2856,5.3832],"13009":[43.2585,5.4090],"13012":[43.2985,5.4232]};
+const BIENS=[
+{i:267589867,t:"a",s:"13005",p:379000,pc:4,ch:3,m2:92,d:"D",q:"Le Camas",x:0},
+{i:269374989,t:"a",s:"13005",p:399000,pc:4,ch:2,m2:94,d:"C",q:"Le Camas",x:0},
+{i:269463533,t:"a",s:"13005",p:423000,pc:4,ch:3,m2:99,d:"C",q:"Le Camas",x:0},
+{i:270422541,t:"a",s:"13005",p:360000,pc:4,ch:3,m2:98.8,d:"D",q:"",x:0},
+{i:269030395,t:"a",s:"13005",p:365000,pc:4,ch:3,m2:100,d:"C",q:"Saint Pierre",x:0},
+{i:266490601,t:"a",s:"13005",p:399000,pc:4,ch:3,m2:97,d:"C",q:"Baille",x:0},
+{i:268118745,t:"a",s:"13005",p:400000,pc:4,ch:3,m2:92,d:"C",q:"La Conception",x:0},
+{i:265378757,t:"a",s:"13005",p:295000,pc:4,ch:3,m2:90,d:"C",q:"Baille",x:0},
+{i:266689595,t:"a",s:"13005",p:320000,pc:4,ch:3,m2:88,d:"C",q:"Saint Pierre",x:0},
+{i:261786937,t:"a",s:"13005",p:310000,pc:4,ch:4,m2:121,d:"D",q:"",x:0},
+{i:267460883,t:"a",s:"13005",p:450000,pc:5,ch:3,m2:103,d:"C",q:"Le Camas",x:0},
+{i:264229919,t:"a",s:"13005",p:350000,pc:5,ch:4,m2:144,d:"D",q:"Saint Pierre",x:0},
+{i:239550011,t:"a",s:"13005",p:320000,pc:5,ch:3,m2:111,d:"C",q:"Saint Pierre",x:0},
+{i:268070621,t:"a",s:"13005",p:250000,pc:5,ch:3,m2:90,d:"C",q:"Saint Pierre",x:0},
+{i:265210921,t:"a",s:"13005",p:380000,pc:5,ch:3,m2:116.4,d:"D",q:"",x:0},
+{i:269466501,t:"a",s:"13005",p:439000,pc:5,ch:4,m2:138.1,d:"C",q:"Notre Dame du Mont",x:0},
+{i:270021299,t:"a",s:"13005",p:360000,pc:5,ch:3,m2:107,d:"D",q:"Lodi",x:0},
+{i:269330497,t:"a",s:"13005",p:400000,pc:5,ch:3,m2:121,d:"C",q:"Cinq Avenues",x:0},
+{i:260262743,t:"a",s:"13005",p:234000,pc:5,ch:3,m2:91.1,d:"D",q:"",x:0},
+{i:269404063,t:"a",s:"13005",p:297825,pc:5,ch:3,m2:98,d:"D",q:"",x:0},
+{i:265525599,t:"a",s:"13005",p:329000,pc:5,ch:5,m2:120,d:"C",q:"",x:0},
+{i:255353387,t:"a",s:"13006",p:449000,pc:4,ch:2,m2:92,d:"A",q:"Castellane",x:0},
+{i:268189851,t:"a",s:"13006",p:345000,pc:4,ch:3,m2:95,d:"C",q:"Lodi",x:0},
+{i:269559445,t:"a",s:"13006",p:385000,pc:4,ch:3,m2:91,d:"F",q:"Le Rouet",x:0},
+{i:261015835,t:"a",s:"13006",p:310000,pc:4,ch:3,m2:94.3,d:"C",q:"Notre Dame du Mont",x:0},
+{i:269483815,t:"a",s:"13006",p:350000,pc:4,ch:2,m2:108,d:"D",q:"Castellane",x:0},
+{i:268242423,t:"a",s:"13006",p:360000,pc:4,ch:3,m2:105,d:"C",q:"Lodi",x:0},
+{i:270272359,t:"a",s:"13006",p:330000,pc:4,ch:3,m2:109,d:"C",q:"Lodi",x:0},
+{i:270365767,t:"a",s:"13006",p:450000,pc:4,ch:3,m2:90,d:"D",q:"Palais de Justice",x:0},
+{i:269961269,t:"a",s:"13006",p:399000,pc:4,ch:3,m2:108,d:"D",q:"Vauban",x:0},
+{i:270154289,t:"a",s:"13006",p:299500,pc:4,ch:3,m2:88,d:"E",q:"Lodi",x:0},
+{i:261763535,t:"a",s:"13001",p:269000,pc:4,ch:3,m2:90,d:"D",q:"",x:0},
+{i:270047333,t:"a",s:"13001",p:270000,pc:4,ch:3,m2:103.3,d:"C",q:"",x:0},
+{i:264340675,t:"a",s:"13001",p:410000,pc:4,ch:3,m2:104,d:"C",q:"Thiers",x:0},
+{i:266832995,t:"a",s:"13001",p:379000,pc:4,ch:3,m2:109,d:"C",q:"Thiers",x:0},
+{i:269379885,t:"a",s:"13001",p:345000,pc:4,ch:3,m2:111,d:"B",q:"Opéra",x:0},
+{i:269278043,t:"a",s:"13001",p:349200,pc:4,ch:3,m2:133,d:"D",q:"Le chapitre",x:0},
+{i:269961347,t:"a",s:"13001",p:300000,pc:4,ch:3,m2:100,d:"C",q:"Thiers",x:0},
+{i:266824501,t:"a",s:"13001",p:379000,pc:4,ch:3,m2:112.9,d:"C",q:"Saint Charles",x:0},
+{i:266003805,t:"a",s:"13001",p:379000,pc:4,ch:3,m2:112.9,d:"C",q:"Saint Charles",x:0},
+{i:264286443,t:"a",s:"13001",p:390000,pc:4,ch:3,m2:104.3,d:"C",q:"Le chapitre",x:0},
+{i:262269205,t:"a",s:"13001",p:229000,pc:4,ch:3,m2:109.9,d:"C",q:"Belsunce",x:0},
+{i:268949697,t:"a",s:"13001",p:420000,pc:4,ch:3,m2:104.4,d:"C",q:"Belsunce",x:0},
+{i:260634459,t:"a",s:"13002",p:269000,pc:4,ch:3,m2:93,d:"G",q:"Les Grandes Carmes",x:0},
+{i:269670829,t:"a",s:"13002",p:249000,pc:4,ch:0,m2:89.7,d:"D",q:"La Joliette",x:0},
+{i:254441413,t:"a",s:"13002",p:395000,pc:4,ch:3,m2:97,d:"D",q:"",x:0},
+{i:269327415,t:"a",s:"13002",p:299000,pc:4,ch:0,m2:114.2,d:"B",q:"La Joliette",x:0},
+{i:269329263,t:"a",s:"13002",p:319200,pc:4,ch:3,m2:95,d:"D",q:"Les Grandes Carmes",x:0},
+{i:268645611,t:"a",s:"13004",p:295000,pc:4,ch:3,m2:103,d:"D",q:"Les Chutes Lavies",x:0},
+{i:249546435,t:"a",s:"13004",p:370000,pc:4,ch:2,m2:112,d:"C",q:"Cinq Avenues",x:0},
+{i:270369217,t:"a",s:"13004",p:266000,pc:4,ch:3,m2:107,d:"E",q:"Les Chutes Lavies",x:0},
+{i:268570537,t:"a",s:"13004",p:355000,pc:4,ch:3,m2:167,d:"",q:"La Blancarde",x:0},
+{i:267299983,t:"a",s:"13004",p:266000,pc:4,ch:3,m2:106,d:"E",q:"Les Chutes Lavies",x:0},
+{i:258267135,t:"a",s:"13004",p:345000,pc:4,ch:2,m2:90,d:"C",q:"Saint Jean du désert",x:0},
+{i:270206287,t:"a",s:"13004",p:300000,pc:4,ch:3,m2:94,d:"D",q:"La Blancarde",x:0},
+{i:266956925,t:"a",s:"13004",p:327608,pc:4,ch:3,m2:91,d:"E",q:"",x:0},
+{i:266932651,t:"a",s:"13012",p:348000,pc:4,ch:3,m2:120,d:"C",q:"Montolivet",x:0},
+{i:264516279,t:"a",s:"13012",p:369000,pc:4,ch:3,m2:90.5,d:"C",q:"",x:0},
+{i:244141811,t:"a",s:"13012",p:395000,pc:4,ch:3,m2:115,d:"B",q:"Saint Marcel",x:0},
+{i:270217683,t:"a",s:"13012",p:221000,pc:4,ch:3,m2:88.7,d:"C",q:"Montolivet",x:0},
+{i:269466537,t:"a",s:"13012",p:289000,pc:4,ch:3,m2:94,d:"D",q:"La Fourragère",x:0},
+{i:270421669,t:"a",s:"13012",p:250000,pc:4,ch:3,m2:91,d:"E",q:"Saint Barnabé",x:0},
+{i:268005145,t:"a",s:"13012",p:415000,pc:4,ch:3,m2:88,d:"D",q:"Saint Julien",x:0},
+{i:269581521,t:"a",s:"13009",p:249000,pc:4,ch:3,m2:90,d:"D",q:"",x:0},
+{i:255375779,t:"a",s:"13009",p:289000,pc:4,ch:3,m2:105,d:"D",q:"Sainte Marguerite",x:0},
+{i:265695853,t:"a",s:"13009",p:289000,pc:4,ch:3,m2:106,d:"C",q:"Sainte Marguerite",x:0},
+{i:253113433,t:"a",s:"13009",p:250000,pc:4,ch:3,m2:90,d:"D",q:"Le Cabot",x:0},
+{i:245794675,t:"a",s:"13009",p:355000,pc:4,ch:3,m2:100,d:"D",q:"Le Cabot",x:0},
+{i:266239481,t:"a",s:"13009",p:380000,pc:4,ch:3,m2:96,d:"C",q:"Le Cabot",x:0},
+{i:261549665,t:"a",s:"13009",p:250000,pc:4,ch:3,m2:98,d:"D",q:"",x:0},
+{i:270076741,t:"a",s:"13009",p:283000,pc:4,ch:2,m2:93.1,d:"C",q:"Le Cabot",x:0},
+{i:270249019,t:"a",s:"13009",p:298000,pc:4,ch:3,m2:88,d:"D",q:"La Panouse",x:0},
+{i:267517979,t:"a",s:"13009",p:355000,pc:4,ch:3,m2:98,d:"C",q:"Le Cabot",x:0},
+{i:265769917,t:"m",s:"13009",p:450000,pc:5,ch:4,m2:135,d:"C",q:"",x:1},
+{i:266169727,t:"m",s:"13009",p:439000,pc:5,ch:4,m2:130,d:"D",q:"",x:1},
+{i:259439317,t:"m",s:"13012",p:314000,pc:5,ch:3,m2:112,d:"D",q:"",x:1},
+{i:3166690920,t:"a",s:"13005",p:350000,pc:5,ch:4,m2:144,d:"D",q:"",x:0,src:"LBC",lat:43.29304,lng:5.40556},
+{i:3191296870,t:"a",s:"13005",p:250000,pc:5,ch:3,m2:90,d:"",q:"",x:0,src:"LBC",lat:43.29585,lng:5.40410},
+{i:3173115781,t:"a",s:"13005",p:295000,pc:4,ch:3,m2:90,d:"C",q:"",x:0,src:"LBC",lat:43.28554,lng:5.39329},
+{i:3206896969,t:"a",s:"13005",p:360000,pc:4,ch:3,m2:99,d:"D",q:"",x:0,src:"LBC",lat:43.29344,lng:5.41518},
+{i:3201155864,t:"a",s:"13005",p:423000,pc:4,ch:3,m2:99,d:"C",q:"",x:0,src:"LBC",lat:43.29454,lng:5.39681},
+{i:3142854753,t:"m",s:"13005",p:325000,pc:4,ch:3,m2:104,d:"C",q:"",x:0,src:"LBC",lat:43.29427,lng:5.40142},
+{i:3206900105,t:"m",s:"13005",p:419000,pc:4,ch:3,m2:90,d:"C",q:"",x:0,src:"LBC",lat:43.29709,lng:5.39138},
+{i:3143119784,t:"a",s:"13006",p:310000,pc:4,ch:3,m2:94,d:"C",q:"",x:0,src:"LBC",lat:43.29046,lng:5.38680},
+{i:3200576982,t:"a",s:"13001",p:345000,pc:4,ch:3,m2:111,d:"B",q:"",x:0,src:"LBC",lat:43.29207,lng:5.37263},
+{i:3199766767,t:"a",s:"13001",p:349200,pc:4,ch:3,m2:133,d:"D",q:"",x:0,src:"LBC",lat:43.30358,lng:5.38519},
+{i:3183221936,t:"a",s:"13001",p:379000,pc:4,ch:3,m2:109,d:"C",q:"",x:0,src:"LBC",lat:43.30595,lng:5.39120},
+{i:3101046459,t:"a",s:"13001",p:398000,pc:4,ch:2,m2:92,d:"D",q:"",x:0,src:"LBC",lat:43.29807,lng:5.37999},
+{i:3205344550,t:"a",s:"13002",p:249000,pc:4,ch:0,m2:90,d:"D",q:"",x:0,src:"LBC",lat:43.29773,lng:5.36063},
+{i:3121391397,t:"a",s:"13002",p:319200,pc:4,ch:3,m2:95,d:"D",q:"",x:0,src:"LBC",lat:43.30199,lng:5.37297},
+{i:3202058912,t:"a",s:"13004",p:259000,pc:4,ch:3,m2:92,d:"D",q:"",x:0,src:"LBC",lat:43.29672,lng:5.40635},
+{i:3055499559,t:"a",s:"13004",p:299700,pc:4,ch:3,m2:112,d:"C",q:"",x:0,src:"LBC",lat:43.29588,lng:5.40798},
+{i:3194407471,t:"a",s:"13004",p:355000,pc:4,ch:3,m2:167,d:"D",q:"",x:0,src:"LBC",lat:43.31048,lng:5.40271},
+{i:3079186211,t:"a",s:"13004",p:264000,pc:5,ch:4,m2:105,d:"D",q:"",x:0,src:"LBC",lat:43.30712,lng:5.39856},
+{i:3201278449,t:"a",s:"13004",p:400000,pc:5,ch:3,m2:121,d:"C",q:"",x:0,src:"LBC",lat:43.29956,lng:5.38952},
+{i:3207087331,t:"a",s:"13012",p:250000,pc:4,ch:3,m2:91,d:"E",q:"",x:0,src:"LBC",lat:43.30791,lng:5.41860},
+{i:3054929871,t:"a",s:"13012",p:378000,pc:4,ch:3,m2:90,d:"B",q:"",x:0,src:"LBC",lat:43.30700,lng:5.42039},
+{i:3181315954,t:"a",s:"13012",p:299000,pc:5,ch:3,m2:104,d:"B",q:"",x:0,src:"LBC",lat:43.30917,lng:5.46962},
+{i:3207036347,t:"a",s:"13012",p:350000,pc:4,ch:3,m2:92,d:"C",q:"",x:0,src:"LBC",lat:43.30893,lng:5.42546},
+{i:3167798776,t:"a",s:"13012",p:259000,pc:5,ch:4,m2:110,d:"F",q:"",x:0,src:"LBC",lat:43.31257,lng:5.42966},
+{i:3177031847,t:"m",s:"13012",p:415000,pc:4,ch:3,m2:90,d:"B",q:"",x:0,src:"LBC",lat:43.30985,lng:5.43260},
+{i:3145465741,t:"a",s:"13012",p:295000,pc:5,ch:4,m2:106,d:"C",q:"",x:0,src:"LBC",lat:43.30460,lng:5.41666},
+{i:3150387749,t:"a",s:"13012",p:230000,pc:4,ch:3,m2:109,d:"",q:"",x:0,src:"LBC",lat:43.30529,lng:5.45803},
+{i:3187408485,t:"a",s:"13009",p:355000,pc:4,ch:3,m2:98,d:"C",q:"",x:0,src:"LBC",lat:43.25132,lng:5.41676},
+{i:3155191967,t:"a",s:"13009",p:415000,pc:4,ch:3,m2:100,d:"D",q:"",x:0,src:"LBC",lat:43.24952,lng:5.40215},
+{i:3138010794,t:"a",s:"13009",p:370000,pc:4,ch:3,m2:91,d:"C",q:"",x:0,src:"LBC",lat:43.24491,lng:5.41226},
+{i:3204058614,t:"a",s:"13009",p:425000,pc:4,ch:3,m2:98,d:"B",q:"",x:0,src:"LBC",lat:43.25090,lng:5.40294},
+{i:"163f522a-a2cf-4fb0-a576-5c6522b33800",t:"a",s:"13001",p:300000,pc:6,ch:0,m2:92,d:"",q:"",x:0,src:"JK"},
+{i:"0888122a-81c0-4295-b2f5-72cf9820cc12",t:"a",s:"13004",p:400000,pc:5,ch:3,m2:121,d:"C",q:"",x:0,src:"JK"},
+{i:"63fdc21b-b1a4-4b18-b488-487de1881f07",t:"a",s:"13006",p:328000,pc:5,ch:3,m2:90,d:"D",q:"Notre dame du mont",x:0,src:"JK"},
+{i:"7c4ccc7b-e76d-4e01-9620-a826a9bd8b72",t:"a",s:"13009",p:295000,pc:4,ch:3,m2:93,d:"D",q:"Le redon",x:0,src:"JK"},
+{i:"80b8622b-eb12-4b3d-9e2a-750663257c66",t:"a",s:"13001",p:345000,pc:4,ch:3,m2:111,d:"B",q:"Opera",x:0,src:"JK"},
+{i:"9cf2d189-9f8d-425d-84c6-e1730aaf6279",t:"a",s:"13012",p:289000,pc:4,ch:3,m2:94,d:"",q:"La fourragere",x:0,src:"JK"},
+{i:"2d7b1e0d-286c-4163-a37f-c85ed244eebe",t:"a",s:"13004",p:338000,pc:5,ch:3,m2:90,d:"",q:"",x:0,src:"JK"},
+{i:"f275e9e8-a3b3-4233-95f2-edca4f0639ec",t:"a",s:"13004",p:420000,pc:4,ch:3,m2:110,d:"",q:"Chutes lavie",x:0,src:"JK"},
+{i:"5ff7b9f3-d86c-427b-a8c0-6aa9e9b7b2e3",t:"a",s:"13002",p:350000,pc:5,ch:3,m2:95,d:"",q:"Hotel de ville",x:0,src:"JK"},
+{i:"398f2a8b-e3d8-4466-9917-501e8f72952a",t:"a",s:"13006",p:350000,pc:4,ch:2,m2:108,d:"",q:"Castellane",x:0,src:"JK"},
+{i:"aff3f3f0-9246-4ef5-bc23-3129ddb0c2f7",t:"a",s:"13005",p:423000,pc:4,ch:3,m2:99,d:"",q:"Le camas",x:0,src:"JK"},
+{i:"11b8c6e5-1854-4018-a091-63696b8dba7e",t:"a",s:"13005",p:399000,pc:4,ch:2,m2:94,d:"",q:"Le camas",x:0,src:"JK"},
+{i:"84d0edee-8c1d-49e9-a811-cce5c60825a6",t:"a",s:"13006",p:330000,pc:4,ch:3,m2:109,d:"",q:"Lodi",x:0,src:"JK"},
+{i:"14f5caf2-bcca-48ad-b881-f582f3fe811e",t:"a",s:"13009",p:380000,pc:5,ch:3,m2:105,d:"",q:"Le cabot",x:0,src:"JK"},
+{i:"2c2d1f61-4192-40c2-803c-cd1d02e6a23e",t:"a",s:"13009",p:348000,pc:4,ch:3,m2:99,d:"",q:"Sainte marguerite",x:0,src:"JK"},
+{i:"8bd19654-02b8-481f-bb34-f07de0a9d56c",t:"a",s:"13009",p:350000,pc:4,ch:3,m2:106,d:"",q:"Le cabot",x:0,src:"JK"},
+{i:"cf3c98a9-a55d-461f-80cf-fab1da956a68",t:"a",s:"13009",p:425000,pc:4,ch:3,m2:98,d:"",q:"Le cabot",x:0,src:"JK"},
+{i:"ed6ef902-d3f9-47de-b604-97f541cd8b97",t:"a",s:"13006",p:365000,pc:4,ch:3,m2:88,d:"",q:"",x:0,src:"JK"},
+{i:"9e8c98ea-bc13-42ea-8969-38f3a9ae1cd4",t:"a",s:"13009",p:440000,pc:4,ch:3,m2:128,d:"",q:"Le redon",x:0,src:"JK"},
+{i:"98c032b6-4945-46ca-893c-ba729847d6da",t:"a",s:"13012",p:400000,pc:4,ch:3,m2:113,d:"",q:"Saint julien",x:0,src:"JK"},
+{i:"33fb06d4-d366-4034-9061-65b9ff900006",t:"a",s:"13009",p:283000,pc:4,ch:2,m2:93,d:"",q:"Le cabot",x:0,src:"JK"},
+{i:"06a41737-95e1-41dc-b7fa-3cee0152858b",t:"a",s:"13001",p:300000,pc:4,ch:3,m2:100,d:"",q:"Thiers",x:0,src:"JK"},
+{i:"129961e4-a0e1-467e-844b-cf1235c3c85d",t:"a",s:"13006",p:399000,pc:4,ch:3,m2:108,d:"",q:"Vauban",x:0,src:"JK"},
+{i:"1d888519-76f2-493e-898b-f2e2085beca2",t:"a",s:"13009",p:418000,pc:4,ch:0,m2:114,d:"",q:"Sainte marguerite",x:0,src:"JK"},
+{i:"bcd6fe15-3f0e-4418-bead-63299409f00a",t:"a",s:"13002",p:299000,pc:4,ch:0,m2:114,d:"",q:"La joliette",x:0,src:"JK"},
+{i:"acf1c397-8ad4-4c4a-973a-1719a1932f40",t:"a",s:"13005",p:365000,pc:4,ch:3,m2:100,d:"",q:"Saint pierre",x:0,src:"JK"},
+{i:"0bc2f4d5-1597-4fbb-a346-e702cc46af6f",t:"a",s:"13005",p:419000,pc:4,ch:3,m2:90,d:"",q:"",x:0,src:"JK"},
+{i:"f0d30880-de0a-4de9-8aa0-b7912b1abf67",t:"a",s:"13001",p:417000,pc:4,ch:3,m2:97,d:"",q:"Saint charles",x:0,src:"JK"},
+{i:"2deae8b3-bc9f-4d82-b4b0-05a565ba3363",t:"a",s:"13006",p:349000,pc:4,ch:3,m2:119,d:"",q:"",x:0,src:"JK"},
+{i:"ee1d9d97-0f87-450b-b5dd-f15ed8801444",t:"a",s:"13004",p:420000,pc:5,ch:4,m2:110,d:"",q:"",x:0,src:"JK"},
+{i:"ae12550b-5d37-4c86-9dc6-076318472ee3",t:"a",s:"13009",p:399000,pc:5,ch:3,m2:99,d:"",q:"",x:0,src:"JK"},
+{i:"3718ecd3-4537-43f1-9a68-1d4481d00f8f",t:"a",s:"13012",p:345000,pc:4,ch:2,m2:90,d:"",q:"",x:0,src:"JK"}
+];
+const fmtP=p=>p.toLocaleString('fr-FR')+" €";
+const SECTLBL={a:"Appart.",m:"Maison"};
+const DPECOL={A:"#2E7D32",B:"#4CAF50",C:"#8BC34A",D:"#F4C20D",E:"#F0AD4E",F:"#FF7043",G:"#D9534F"};
+const SRC={SL:{n:"SeLoger",c:"#E2001A"},LBC:{n:"LeBonCoin",c:"#FF6E14"},JK:{n:"Jinka",c:"#6C3FC7"}};
+function srcOf(b){return b.src||'SL';}
+function url(b){const s=srcOf(b);if(s==='LBC')return "https://www.leboncoin.fr/ad/ventes_immobilieres/"+b.i;if(s==='JK')return "https://www.jinka.fr/ad/"+b.i;return "https://www.seloger.com/annonces/achat/"+(b.t==='m'?'maison':'appartement')+"/marseille-13/"+b.i+".htm";}
+function srcBadge(b){const s=SRC[srcOf(b)];return '<span class="badge" style="background:'+s.c+'1e;color:'+s.c+'">'+s.n+'</span>';}
+const EXTMAP={3166690920:"Terrasse",3173115781:"Balcon",3206896969:"Terrasse",3206900105:"Terrasse",3202058912:"Balcon",3055499559:"Balcon",3194407471:"Balcon",3079186211:"Balcon",3207087331:"Balcon",3054929871:"Terrasse",3181315954:"Terrasse",3207036347:"Balcon",3177031847:"Jardin",3145465741:"Balcon",3150387749:"Terrasse",3187408485:"Balcon",3155191967:"Terrasse",3138010794:"Jardin",3204058614:"Terrasse"};
+function extOf(b){if(EXTMAP[b.i])return EXTMAP[b.i];if(b.t==='m')return "Jardin";return "";}
+function hav(a,o,c,g){const R=6371000,dLat=(c-a)*Math.PI/180,dLng=(g-o)*Math.PI/180,la1=a*Math.PI/180,la2=c*Math.PI/180;const h=Math.sin(dLat/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLng/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+function hashId(v){if(typeof v==='number')return v;let h=0;const s=String(v);for(let k=0;k<s.length;k++)h=(h*31+s.charCodeAt(k))>>>0;return h;}
+function geo(b){const k=(b.q||'').toLowerCase();const c=QUART[k]||SECTC[b.s]||[43.295,5.385];const h=hashId(b.i);return [c[0]+(((h%7)-3)*0.0006),c[1]+(((h%5)-2)*0.0008)];}
+BIENS.forEach(b=>{const ll=(b.lat&&b.lng)?[b.lat,b.lng]:geo(b);b._lat=ll[0];b._lng=ll[1];let bd=1e9,bs=null;STATIONS.forEach(s=>{const d=hav(ll[0],ll[1],s.lat,s.lng);if(d<bd){bd=d;bs=s;}});if(!bs){bs={n:"—"};bd=0;}b._d=Math.round(bd);b._st=bs;b._m2p=Math.round(b.p/b.m2);});
+const tColor=d=>d==null?"#9098a5":d<=300?"#5CB85C":d<=600?"#F0AD4E":"#D9534F";
+const isStar=b=>(b.ch>=3)&&b.p<=430000&&b._m2p<=3800&&b._d<=400;
+const FAVKEY="geral_fav_v1";
+function loadFav(){try{return new Set(JSON.parse(localStorage.getItem(FAVKEY))||[])}catch(e){return new Set()}}
+let FAV=loadFav();
+function saveFav(){try{localStorage.setItem(FAVKEY,JSON.stringify([...FAV]))}catch(e){}}
+function toggleFav(id){id=String(id);if(FAV.has(id))FAV.delete(id);else FAV.add(id);saveFav();renderKPIs();render();}
+function isFav(b){return FAV.has(String(b.i));}
+const VUKEY="geral_vu_v1";
+function loadVus(){try{return new Set(JSON.parse(localStorage.getItem(VUKEY))||[])}catch(e){return new Set()}}
+let VUS=loadVus();
+function saveVus(){try{localStorage.setItem(VUKEY,JSON.stringify([...VUS]))}catch(e){}}
+function isVu(b){return VUS.has(String(b.i));}
+function toggleVu(id){id=String(id);if(VUS.has(id))VUS.delete(id);else VUS.add(id);saveVus();renderKPIs();render();}
+function markSeen(id){id=String(id);if(!VUS.has(id)){VUS.add(id);saveVus();setTimeout(()=>{renderKPIs();render();},10);}}
+let sortKey="_m2p",sortDir=1,currentData=[];
+const dpeRank={A:1,B:2,C:3,D:4,E:5,F:6,G:7,"":9};
+
+function getFiltered(){
+  const fb=document.getElementById('fBien').value,fty=document.getElementById('fType').value,
+    fch=document.getElementById('fCh').value,fsec=document.getElementById('fSect').value,
+    ftp=document.getElementById('fTport').value,fd=document.getElementById('fDpe').value,
+    px=+document.getElementById('fPrix').value,fstar=document.getElementById('fStar').checked,
+    fsr=document.getElementById('fSrc').value,
+    fext=document.getElementById('fExt').value,
+    hv=document.getElementById('fHideVu').checked,
+    ffav=document.getElementById('fFav').checked;
+  return BIENS.filter(b=>{
+    if(hv&&isVu(b))return false;
+    if(fb&&b.t!==fb)return false;
+    if(fsr&&srcOf(b)!==fsr)return false;
+    if(fext==='oui'&&!extOf(b))return false;
+    if(fty&&String(b.pc)!==fty)return false;
+    if(fch&&!(b.ch>=+fch))return false;
+    if(fsec&&b.s!==fsec)return false;
+    if(ftp&&!(b._d<=+ftp))return false;
+    if(fd&&!(b.d&&dpeRank[b.d]<=dpeRank[fd]))return false;
+    if(b.p>px)return false;
+    if(fstar&&!isStar(b))return false;
+    if(ffav&&!isFav(b))return false;
+    return true;
+  }).sort((a,b)=>{
+    if(sortKey==="fav")return ((isFav(b)?1:0)-(isFav(a)?1:0))*sortDir;
+    if(sortKey==="x")return ((extOf(b)?1:0)-(extOf(a)?1:0))*sortDir;
+    if(sortKey==="secteur")return (a.s+a.q).localeCompare(b.s+b.q)*sortDir;
+    if(sortKey==="d")return ((dpeRank[a.d]||9)-(dpeRank[b.d]||9))*sortDir;
+    if(sortKey==="td")return (a._d-b._d)*sortDir;
+    let va=a[sortKey],vb=b[sortKey];return (va-vb)*sortDir;
+  });
+}
+function renderKPIs(){
+  const n=BIENS.length,mais=BIENS.filter(b=>b.t==='m').length,stars=BIENS.filter(isStar).length;
+  const prix=BIENS.map(b=>b.p).sort((a,b)=>a-b),med=prix[Math.floor(prix.length/2)];
+  const m2=BIENS.map(b=>b.m2).sort((a,b)=>a-b),medM=m2[Math.floor(m2.length/2)];
+  const minM2p=Math.min(...BIENS.map(b=>b._m2p));
+  document.getElementById('kpis').innerHTML=`
+    <div class="kpi"><div class="lbl">Annonces réelles</div><div class="val">${n}</div><div class="sub">SL ${BIENS.filter(b=>srcOf(b)==='SL').length} · LBC ${BIENS.filter(b=>srcOf(b)==='LBC').length} · Jinka ${BIENS.filter(b=>srcOf(b)==='JK').length}</div></div>
+    <div class="kpi"><div class="lbl">Coups de cœur</div><div class="val gold">★ ${stars}</div><div class="sub">meilleur rapport</div></div>
+    <div class="kpi"><div class="lbl">Mes favoris</div><div class="val red">❤ ${FAV.size}</div><div class="sub">cliquez le ❤</div></div>
+    <div class="kpi"><div class="lbl">Déjà vus</div><div class="val">✓ ${VUS.size}</div><div class="sub">annonces consultées</div></div>
+    <div class="kpi"><div class="lbl">Maisons</div><div class="val green">${mais}</div><div class="sub">avec extérieur</div></div>
+    <div class="kpi"><div class="lbl">Surface médiane</div><div class="val">${medM} m²</div><div class="sub">de la sélection</div></div>
+    <div class="kpi"><div class="lbl">Budget médian</div><div class="val">${Math.round(med/1000)} K€</div><div class="sub">prix d'affichage</div></div>
+    <div class="kpi"><div class="lbl">Meilleur €/m²</div><div class="val green">${minM2p.toLocaleString('fr-FR')}</div><div class="sub">de la sélection</div></div>`;
+}
+function render(){
+  const data=getFiltered();currentData=data;
+  document.getElementById('tbody').innerHTML=data.map(b=>{
+    const fav=isFav(b);
+    const dpe=b.d?`<span class="dpe" style="background:${DPECOL[b.d]}">${b.d}</span>`:'<span class="dpe" style="background:#aab">NR</span>';
+    return `<tr class="${fav?'fav':''} ${isVu(b)?'vu':''}">
+    <td style="text-align:center"><span class="heart ${fav?'on':''}" onclick="toggleFav('${b.i}')" title="Ajouter aux favoris">${fav?'❤':'♡'}</span></td>
+    <td><div class="secteur">${isStar(b)?'<span class="star">★</span> ':''}${SECTLBL[b.t]} · ${b.s}</div><div class="quart">${b.q||'—'}${b.t==='m'?' · maison/jardin':''} · ${srcBadge(b)}</div></td>
+    <td>${b.m2} m²</td>
+    <td>${b.ch?b.ch+' ch':'—'}</td>
+    <td class="prix">${fmtP(b.p)}</td>
+    <td>${b._m2p.toLocaleString('fr-FR')}</td>
+    <td class="tport"><span class="badge" style="background:${tColor(b._d)}22;color:${tColor(b._d)}">${b._d} m</span><div class="tdist">${b._st.n}</div></td>
+    <td>${extOf(b)?`<span class="badge" style="background:var(--vert-bg);color:#2D7A2D">${extOf(b)}</span>`:'<span class="badge" style="background:var(--gris2);color:#6B7280">à conf.</span>'}</td>
+    <td style="text-align:center">${dpe}</td>
+    <td><a class="lien" href="${url(b)}" target="_blank" rel="noopener" onclick="markSeen('${b.i}')">Voir l'annonce ↗</a><br><a class="vutoggle ${isVu(b)?'on':''}" href="#" onclick="toggleVu('${b.i}');return false;">${isVu(b)?'✓ Vu — annuler':'Marquer vu'}</a></td>
+  </tr>`;}).join('');
+  document.getElementById('tableCount').textContent=data.length+" bien"+(data.length>1?"s":"");
+  renderMap();
+}
+
+const TILE=256,CENTRE={lat:43.2930,lng:5.3950};
+let mapView={lat:CENTRE.lat,lng:CENTRE.lng,z:12};
+function project(lat,lng,z){const s=Math.sin(lat*Math.PI/180);const x=(lng+180)/360*Math.pow(2,z);const y=(0.5-Math.log((1+s)/(1-s))/(4*Math.PI))*Math.pow(2,z);return {x:x*TILE,y:y*TILE};}
+function mpp(lat,z){return 156543.03392*Math.cos(lat*Math.PI/180)/Math.pow(2,z);}
+function renderMap(){
+  const map=document.getElementById('map');if(!map)return;
+  const W=map.clientWidth||460,H=map.clientHeight||560,z=mapView.z,n=Math.pow(2,z);
+  const c=project(mapView.lat,mapView.lng,z),oX=c.x-W/2,oY=c.y-H/2;let html='';
+  const x0=Math.floor(oX/TILE),x1=Math.floor((oX+W)/TILE),y0=Math.floor(oY/TILE),y1=Math.floor((oY+H)/TILE);
+  for(let tx=x0;tx<=x1;tx++)for(let ty=y0;ty<=y1;ty++){if(ty<0||ty>=n)continue;const wx=((tx%n)+n)%n,sub="abc"[((tx%3)+3)%3];html+=`<img class="tile" src="https://${sub}.tile.openstreetmap.org/${z}/${wx}/${ty}.png" style="left:${tx*TILE-oX}px;top:${ty*TILE-oY}px" onerror="this.style.display='none'" draggable="false">`;}
+  map.innerHTML=html;
+  STATIONS.forEach(s=>{const p=project(s.lat,s.lng,z),mx=p.x-oX,my=p.y-oY;if(mx<-20||mx>W+20||my<-20||my>H+20)return;const el=document.createElement('div');el.className='station';el.style.cssText=`left:${mx}px;top:${my}px;background:${s.c}`;el.title=s.n+" — "+s.l;map.appendChild(el);});
+  currentData.forEach(b=>{const p=project(b._lat,b._lng,z),mx=p.x-oX,my=p.y-oY;if(mx<-40||mx>W+40||my<-40||my>H+40)return;const el=document.createElement('a');el.href=url(b);el.target='_blank';el.rel='noopener';el.className='mk'+(isFav(b)?' mkfav':'');el.style.cssText=`left:${mx}px;top:${my}px;background:${tColor(b._d)}`;el.title=`${SECTLBL[b.t]} ${b.s} · ${b.q||''} · ${b.m2} m² · ${fmtP(b.p)} · ${b._st.n} ${b._d} m`;el.innerHTML=isStar(b)?'★':(isFav(b)?'❤':'');map.appendChild(el);});
+}
+(function initMap(){
+  const map=document.getElementById('map');let drag=null;
+  map.addEventListener('mousedown',e=>{drag={x:e.clientX,y:e.clientY,lat:mapView.lat,lng:mapView.lng,moved:false};map.style.cursor='grabbing';});
+  window.addEventListener('mousemove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>3)drag.moved=true;const m=mpp(drag.lat,mapView.z);mapView.lng=drag.lng-dx*m/(111320*Math.cos(drag.lat*Math.PI/180));mapView.lat=drag.lat+dy*m/110540;renderMap();});
+  window.addEventListener('mouseup',()=>{if(drag){map.style.cursor='grab';drag=null;}});
+  map.addEventListener('click',e=>{if(drag&&drag.moved)e.preventDefault();},true);
+  map.addEventListener('wheel',e=>{e.preventDefault();mapView.z=Math.max(11,Math.min(18,mapView.z+(e.deltaY<0?1:-1)));renderMap();},{passive:false});
+  document.getElementById('zin').addEventListener('click',()=>{mapView.z=Math.min(18,mapView.z+1);renderMap();});
+  document.getElementById('zout').addEventListener('click',()=>{mapView.z=Math.max(11,mapView.z-1);renderMap();});
+  document.getElementById('zfit').addEventListener('click',()=>{mapView={lat:CENTRE.lat,lng:CENTRE.lng,z:12};renderMap();});
+  let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(renderMap,150);});
+})();
+function initSel(){[...new Set(BIENS.map(b=>b.s))].sort().forEach(q=>{const o=document.createElement('option');o.value=q;o.textContent=q;document.getElementById('fSect').appendChild(o);});}
+document.querySelectorAll('th[data-k]').forEach(th=>th.addEventListener('click',()=>{const k=th.dataset.k;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}render();}));
+['fBien','fType','fCh','fSect','fSrc','fTport','fDpe','fExt','fPrix','fStar','fFav','fHideVu'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{document.getElementById('prixVal').textContent=(+document.getElementById('fPrix').value).toLocaleString('fr-FR')+" €";render();}));
+document.getElementById('reset').addEventListener('click',()=>{['fBien','fType','fCh','fSect','fSrc','fTport','fDpe','fExt'].forEach(id=>document.getElementById(id).value="");document.getElementById('fStar').checked=false;document.getElementById('fFav').checked=false;document.getElementById('fHideVu').checked=false;document.getElementById('fPrix').value=450000;document.getElementById('prixVal').textContent="450 000 €";sortKey="_m2p";sortDir=1;render();});
+initSel();renderKPIs();render();
+</script>
+</body>
+</html>
